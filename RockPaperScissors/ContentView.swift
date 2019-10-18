@@ -21,12 +21,10 @@ struct ContentView: View {
     @State private var roundOfGame = 1
     /// Score of the game
     @State private var scoreOfTheGame = 0
+    /// The remaining second to the next round
+    @State private var remainingSeconds = 5
     
-    @State private var timer = Timer()
-    
-    @State private var remainingSeconds = 3
-    
-    
+    let numberOfSecondsToNextRound = 5
     // MARK: - View
     var body: some View {
         
@@ -36,6 +34,8 @@ struct ContentView: View {
                 Text("Round: \(self.roundOfGame)/10")
                 Text("Score: \(self.scoreOfTheGame)")
             }
+            
+            Text("Next round in: \(remainingSeconds) seconds")
             
             // Message to the user
             Text("iPhones choice is \(computerChoice.rawValue.uppercased()) is and you must \(playerShouldWin ? "WIN" : "LOSE")!" )
@@ -79,8 +79,7 @@ struct ContentView: View {
             }))
         }
         .onAppear {
-//            self.configureTimer()
-//            self.timer.fire()
+            self.configureTimer()
         }
     }
     
@@ -89,15 +88,14 @@ struct ContentView: View {
     
     // MARK: - Functions
     
+    //1
     /// When a button is tapped, it checks if the player won NOT PURE
     func buttonTapped(_ playerOption: GameOptions) {
-        // Just in case :)
-        guard roundOfGame <= 10 else { return } // restart game
         computeScore(playerWon: didPlayerWon(player: playerOption, computer: self.computerChoice, playerShouldWin: playerShouldWin))
         nextRound()
     }
     
-    
+    //1.2
     /// Checks if player won and adds or removes points NOT PURE
     func computeScore(playerWon: Bool) {
         if playerWon {//didPlayerWon(player: playerOption, computer: self.computerChoice, playerShouldWin: playerShouldWin) {
@@ -109,7 +107,7 @@ struct ContentView: View {
         }
     }
     
-    
+    //1.3
     /// Changes the state for next round NOT PURE
     func nextRound() {
         // Adds to round of the game
@@ -119,7 +117,7 @@ struct ContentView: View {
         // Random choose if player must win or loose
         playerShouldWin = Bool.random()
         // the remaining seconds of the round
-        remainingSeconds = 3
+        remainingSeconds = numberOfSecondsToNextRound
         // If you are at round 10 the game is over
         if roundOfGame == 10 {
             theGameIsOverAlert = true
@@ -127,19 +125,20 @@ struct ContentView: View {
     }
     
     
-    
+    //2
     /// Reset the state of the game NOT PURE
     func restartGame() {
         roundOfGame = 1
         scoreOfTheGame = 0
-        remainingSeconds = 3
+        remainingSeconds = numberOfSecondsToNextRound
         playerShouldWin = Bool.random()
         computerChoice = GameOptions.allCases.randomElement()!
     }
 
+    //0
     // NOT PURE
     func configureTimer() {
-        timer = Timer.scheduledTimer(withTimeInterval: 1, repeats: true, block: { (inTimer) in
+        Timer.scheduledTimer(withTimeInterval: 1.0, repeats: true, block: { (inTimer) in
             self.remainingSeconds -= 1
             if self.remainingSeconds == 0 {
                 self.computeScore(playerWon: false)
@@ -148,12 +147,13 @@ struct ContentView: View {
         })
     }
     
+    
 }
 
 
 
 
-
+//1.1
 /// Checks if player won, and return the result PURE
 func didPlayerWon(player optionOfPlayer: GameOptions,computer optionOfComputer: GameOptions, playerShouldWin: Bool) -> Bool {
     switch (optionOfPlayer,optionOfComputer) {
