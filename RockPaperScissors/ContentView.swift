@@ -23,55 +23,91 @@ struct ContentView: View {
     @State private var scoreOfTheGame = 0
     /// The remaining second to the next round
     @State private var remainingSeconds = 5
-    
+    /// A constant defining the number of seconds for the next round
     let numberOfSecondsToNextRound = 5
+    
+    @State private var timer: Timer? = nil
     // MARK: - View
     var body: some View {
         
-        VStack {
+        ZStack {
+            LinearGradient(gradient: Gradient(colors: [.blue,.white]), startPoint: .top, endPoint: .bottom)
+            
             // Game statistics Stack
-            HStack {
-                Text("Round: \(self.roundOfGame)/10")
-                Text("Score: \(self.scoreOfTheGame)")
+            VStack {
+                HStack {
+                    Text("Round: \(self.roundOfGame)/10").bold()
+                    Spacer()
+                    Text("Score: \(self.scoreOfTheGame)").bold()
+                }
+                
+                // Message to the user
+                Text("You must \(playerShouldWin ? "WIN" : "LOSE")!" )
+                    .font(.largeTitle)
+                    .padding(.top, 50)
+                Spacer()
             }
-            
-            Text("Next round in: \(remainingSeconds) seconds")
-            
-            // Message to the user
-            Text("iPhones choice is \(computerChoice.rawValue.uppercased()) is and you must \(playerShouldWin ? "WIN" : "LOSE")!" )
+            .padding()
+            .offset(CGSize(width: 0, height: 40))
 
             
-            // Button Stack
-            HStack {
-                Button(action: {
-                    guard self.computerChoice != .Rock else { return }
-                    self.buttonTapped(.Rock)
-                }) {
-                    Image(systemName: "capsule").font(Font.system(size: 50))
-                }
+            // Remaining time stack
+            VStack {
+                Text("\(remainingSeconds)")
+                    .offset(CGSize(width: 0, height: 200))
+                    .font(Font.system(size: 100))
+                Spacer()
+            }
+
+
+
+            
+                // Button Stack
+            VStack {
+                Image(systemName: {() -> String in
+                    switch computerChoice {
+                    case GameOptions.Rock:
+                        return "capsule"
+                    case .Scissors:
+                        return "scissors"
+                    case .Paper:
+                        return "doc.text"
+                    }
+                    
+                }())
+                .font(Font.system(size: 60))
                 .padding()
-                .layoutPriority(1)
                 
-                Button(action: {
-                    guard self.computerChoice != .Scissors else { return }
-                    self.buttonTapped(.Scissors)
-                }) {
-                    Image(systemName: "scissors").font(Font.system(size: 50))
+                HStack {
+                    Button(action: {
+                        guard self.computerChoice != .Rock else { return }
+                        self.buttonTapped(.Rock)
+                    }) {
+                        Image(systemName: "capsule").font(Font.system(size: 60))
+                    }
+                    .padding()
+                    
+                    Button(action: {
+                        guard self.computerChoice != .Scissors else { return }
+                        self.buttonTapped(.Scissors)
+                    }) {
+                        Image(systemName: "scissors").font(Font.system(size: 60))
+                    }
+                    .padding()
+                    
+                    Button(action: {
+                        guard self.computerChoice != .Paper else { return }
+                        self.buttonTapped(.Paper)
+                    }) {
+                        Image(systemName: "doc.text").font(Font.system(size: 60))
+                    }
+                    .padding()
                 }
-                .padding()
-                .layoutPriority(1)
-                
-                Button(action: {
-                    guard self.computerChoice != .Paper else { return }
-                    self.buttonTapped(.Paper)
-                }) {
-                    Image(systemName: "doc.text").font(Font.system(size: 50))
-                }
-                .padding()
-                .layoutPriority(1)
             }
             
         }
+        .edgesIgnoringSafeArea(.all)
+//        .padding()
         .alert(isPresented: $theGameIsOverAlert) { () -> Alert in
             Alert(title: Text("The game is over!"), message: Text("Your score is \(self.scoreOfTheGame)"), dismissButton: .default(Text("Restart Game"), action: {
                 // Restart game
@@ -120,6 +156,9 @@ struct ContentView: View {
         remainingSeconds = numberOfSecondsToNextRound
         // If you are at round 10 the game is over
         if roundOfGame == 10 {
+            if let timer = timer {
+                timer.invalidate()
+            }
             theGameIsOverAlert = true
         }
     }
@@ -133,12 +172,13 @@ struct ContentView: View {
         remainingSeconds = numberOfSecondsToNextRound
         playerShouldWin = Bool.random()
         computerChoice = GameOptions.allCases.randomElement()!
+        configureTimer()
     }
 
     //0
-    // NOT PURE
+    // Configures and fires the timer NOT PURE
     func configureTimer() {
-        Timer.scheduledTimer(withTimeInterval: 1.0, repeats: true, block: { (inTimer) in
+        timer = Timer.scheduledTimer(withTimeInterval: 1.0, repeats: true, block: { (inTimer) in
             self.remainingSeconds -= 1
             if self.remainingSeconds == 0 {
                 self.computeScore(playerWon: false)
