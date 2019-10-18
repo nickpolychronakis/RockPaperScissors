@@ -15,6 +15,7 @@
 		4ED3236A235A2AB6006A3ABA /* LaunchScreen.storyboard in Resources */ = {isa = PBXBuildFile; fileRef = 4ED32368235A2AB6006A3ABA /* LaunchScreen.storyboard */; };
 		4ED32375235A2AB6006A3ABA /* RockPaperScissorsTests.swift in Sources */ = {isa = PBXBuildFile; fileRef = 4ED32374235A2AB6006A3ABA /* RockPaperScissorsTests.swift */; };
 		4ED32380235A2AB6006A3ABA /* RockPaperScissorsUITests.swift in Sources */ = {isa = PBXBuildFile; fileRef = 4ED3237F235A2AB6006A3ABA /* RockPaperScissorsUITests.swift */; };
+		4ED32390235A540A006A3ABA /* Log in Resources */ = {isa = PBXBuildFile; fileRef = 4ED3238F235A540A006A3ABA /* Log */; };
 /* End PBXBuildFile section */
 
 /* Begin PBXContainerItemProxy section */
@@ -49,6 +50,7 @@
 		4ED3237B235A2AB6006A3ABA /* RockPaperScissorsUITests.xctest */ = {isa = PBXFileReference; explicitFileType = wrapper.cfbundle; includeInIndex = 0; path = RockPaperScissorsUITests.xctest; sourceTree = BUILT_PRODUCTS_DIR; };
 		4ED3237F235A2AB6006A3ABA /* RockPaperScissorsUITests.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = RockPaperScissorsUITests.swift; sourceTree = "<group>"; };
 		4ED32381235A2AB6006A3ABA /* Info.plist */ = {isa = PBXFileReference; lastKnownFileType = text.plist.xml; path = Info.plist; sourceTree = "<group>"; };
+		4ED3238F235A540A006A3ABA /* Log */ = {isa = PBXFileReference; lastKnownFileType = text; path = Log; sourceTree = "<group>"; };
 /* End PBXFileReference section */
 
 /* Begin PBXFrameworksBuildPhase section */
@@ -99,6 +101,7 @@
 		4ED3235C235A2AB5006A3ABA /* RockPaperScissors */ = {
 			isa = PBXGroup;
 			children = (
+				4ED3238F235A540A006A3ABA /* Log */,
 				4ED3235D235A2AB5006A3ABA /* AppDelegate.swift */,
 				4ED3235F235A2AB5006A3ABA /* SceneDelegate.swift */,
 				4ED32361235A2AB5006A3ABA /* ContentView.swift */,
@@ -241,6 +244,7 @@
 			buildActionMask = 2147483647;
 			files = (
 				4ED3236A235A2AB6006A3ABA /* LaunchScreen.storyboard in Resources */,
+				4ED32390235A540A006A3ABA /* Log in Resources */,
 				4ED32367235A2AB6006A3ABA /* Preview Assets.xcassets in Resources */,
 				4ED32364235A2AB6006A3ABA /* Assets.xcassets in Resources */,
 			);
